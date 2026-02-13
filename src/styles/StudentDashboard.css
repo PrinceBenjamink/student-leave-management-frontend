@@ -61,12 +61,15 @@
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
+  overflow: hidden;
 }
 
 .filter-buttons {
   display: flex;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  max-width: 100%;
 }
 
 .filter-btn {
@@ -79,6 +82,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 .filter-btn:hover {
@@ -170,8 +176,8 @@
   }
 
   .filter-btn {
-    flex: 1;
-    min-width: 70px;
+    flex: none;
+    min-width: fit-content;
   }
 
   .leave-table th,
