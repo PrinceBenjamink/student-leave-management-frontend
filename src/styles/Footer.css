@@ -1,0 +1,26 @@
+/* Footer Styles */
+.footer {
+  background-color: #1e293b;
+  color: white;
+  padding: 1.5rem 0;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.footer-container p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .footer-container p {
+    font-size: 0.85rem;
+  }
+}
