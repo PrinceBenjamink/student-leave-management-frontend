@@ -6,7 +6,7 @@ function ApplyLeave() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
-    registerNumber: '',
+    rollNumber: '',
     fromDate: '',
     toDate: '',
     leaveType: 'Sick Leave',
@@ -50,14 +50,14 @@ function ApplyLeave() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="registerNumber">Register Number *</label>
+              <label htmlFor="rollNumber">Roll No. *</label>
               <input
                 type="text"
-                id="registerNumber"
-                name="registerNumber"
-                value={formData.registerNumber}
+                id="rollNumber"
+                name="rollNumber"
+                value={formData.rollNumber}
                 onChange={handleChange}
-                placeholder="Enter register number"
+                placeholder="e.g., 24CS001"
                 className="form-input"
                 required
               />

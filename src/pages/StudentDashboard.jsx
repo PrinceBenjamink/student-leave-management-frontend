@@ -4,29 +4,30 @@ import '../styles/StudentDashboard.css';
 
 function StudentDashboard() {
   const navigate = useNavigate();
+  const [filter, setFilter] = useState('All');
   
   // Mock leave history data
   const [leaveHistory] = useState([
     {
       id: 1,
-      fromDate: '2024-01-15',
-      toDate: '2024-01-17',
+      fromDate: '15-01-2024',
+      toDate: '17-01-2024',
       leaveType: 'Sick Leave',
       reason: 'Fever',
       status: 'Approved'
     },
     {
       id: 2,
-      fromDate: '2024-02-10',
-      toDate: '2024-02-12',
+      fromDate: '10-02-2024',
+      toDate: '12-02-2024',
       leaveType: 'Personal Leave',
       reason: 'Family function',
       status: 'Pending'
     },
     {
       id: 3,
-      fromDate: '2024-03-05',
-      toDate: '2024-03-06',
+      fromDate: '05-03-2024',
+      toDate: '06-03-2024',
       leaveType: 'Medical Leave',
       reason: 'Doctor appointment',
       status: 'Rejected'
@@ -36,6 +37,11 @@ function StudentDashboard() {
   const getStatusClass = (status) => {
     return `status-badge status-${status.toLowerCase()}`;
   };
+
+  // Filter leave history based on selected filter
+  const filteredLeaves = filter === 'All' 
+    ? leaveHistory 
+    : leaveHistory.filter(leave => leave.status === filter);
 
   return (
     <div className="dashboard-container">
@@ -51,7 +57,35 @@ function StudentDashboard() {
       </div>
 
       <div className="leave-history-section">
-        <h2>Leave History</h2>
+        <div className="section-header">
+          <h2>Leave History</h2>
+          <div className="filter-buttons">
+            <button 
+              className={filter === 'All' ? 'filter-btn active' : 'filter-btn'}
+              onClick={() => setFilter('All')}
+            >
+              All
+            </button>
+            <button 
+              className={filter === 'Pending' ? 'filter-btn active' : 'filter-btn'}
+              onClick={() => setFilter('Pending')}
+            >
+              Pending
+            </button>
+            <button 
+              className={filter === 'Approved' ? 'filter-btn active' : 'filter-btn'}
+              onClick={() => setFilter('Approved')}
+            >
+              Approved
+            </button>
+            <button 
+              className={filter === 'Rejected' ? 'filter-btn active' : 'filter-btn'}
+              onClick={() => setFilter('Rejected')}
+            >
+              Rejected
+            </button>
+          </div>
+        </div>
         <div className="table-container">
           <table className="leave-table">
             <thead>
@@ -64,7 +98,7 @@ function StudentDashboard() {
               </tr>
             </thead>
             <tbody>
-              {leaveHistory.map((leave) => (
+              {filteredLeaves.map((leave) => (
                 <tr key={leave.id}>
                   <td>{leave.fromDate}</td>
                   <td>{leave.toDate}</td>
