@@ -61,6 +61,14 @@ function FacultyDashboard() {
     ? leaveRequests 
     : leaveRequests.filter(request => request.status === filter);
 
+  // Calculate statistics
+  const stats = {
+    pending: leaveRequests.filter(r => r.status === 'Pending').length,
+    approvedToday: leaveRequests.filter(r => r.status === 'Approved').length,
+    rejectedToday: leaveRequests.filter(r => r.status === 'Rejected').length,
+    totalMonth: leaveRequests.length
+  };
+
   // Mock student leave history for calendar
   const getStudentLeaveHistory = (rollNumber) => {
     const leaveHistoryData = {
@@ -128,6 +136,25 @@ function FacultyDashboard() {
       <div className="dashboard-header">
         <h1>Faculty Approval Dashboard</h1>
         <p className="welcome-message">Review and approve student leave requests</p>
+      </div>
+
+      <div className="stats-container">
+        <div className="stat-card pending">
+          <h3>Pending Requests</h3>
+          <div className="stat-number">{stats.pending}</div>
+        </div>
+        <div className="stat-card approved">
+          <h3>Approved Today</h3>
+          <div className="stat-number">{stats.approvedToday}</div>
+        </div>
+        <div className="stat-card rejected">
+          <h3>Rejected Today</h3>
+          <div className="stat-number">{stats.rejectedToday}</div>
+        </div>
+        <div className="stat-card total">
+          <h3>Total This Month</h3>
+          <div className="stat-number">{stats.totalMonth}</div>
+        </div>
       </div>
 
       <div className="requests-section">

@@ -43,11 +43,39 @@ function StudentDashboard() {
     ? leaveHistory 
     : leaveHistory.filter(leave => leave.status === filter);
 
+  // Calculate statistics
+  const totalAllowed = 20; // Total leave days allowed per year
+  const stats = {
+    approved: leaveHistory.filter(l => l.status === 'Approved').length,
+    pending: leaveHistory.filter(l => l.status === 'Pending').length,
+    rejected: leaveHistory.filter(l => l.status === 'Rejected').length,
+    available: totalAllowed - leaveHistory.filter(l => l.status === 'Approved').length
+  };
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h1>Student Dashboard</h1>
         <p className="welcome-message">Welcome back! Manage your leave applications here.</p>
+      </div>
+
+      <div className="stats-container">
+        <div className="stat-card approved">
+          <h3>Leaves Taken</h3>
+          <div className="stat-number">{stats.approved}</div>
+        </div>
+        <div className="stat-card pending">
+          <h3>Pending Requests</h3>
+          <div className="stat-number">{stats.pending}</div>
+        </div>
+        <div className="stat-card rejected">
+          <h3>Rejected Requests</h3>
+          <div className="stat-number">{stats.rejected}</div>
+        </div>
+        <div className="stat-card available">
+          <h3>Available Days</h3>
+          <div className="stat-number">{stats.available}</div>
+        </div>
       </div>
 
       <div className="dashboard-actions">
