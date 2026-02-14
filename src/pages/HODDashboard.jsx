@@ -64,6 +64,14 @@ function HODDashboard() {
     ? approvedRequests 
     : approvedRequests.filter(request => request.hodStatus === filter);
 
+  // Calculate statistics
+  const stats = {
+    pending: approvedRequests.filter(r => r.hodStatus === 'Pending').length,
+    granted: approvedRequests.filter(r => r.hodStatus === 'Granted').length,
+    rejected: approvedRequests.filter(r => r.hodStatus === 'Rejected').length,
+    total: approvedRequests.length
+  };
+
   // Mock student leave history for calendar
   const getStudentLeaveHistory = (rollNumber) => {
     const leaveHistoryData = {
@@ -131,6 +139,25 @@ function HODDashboard() {
       <div className="dashboard-header">
         <h1>HOD Grant Dashboard</h1>
         <p className="welcome-message">Final approval for faculty-approved leave requests</p>
+      </div>
+
+      <div className="stats-container">
+        <div className="stat-card pending">
+          <h3>Pending Approval</h3>
+          <div className="stat-number">{stats.pending}</div>
+        </div>
+        <div className="stat-card granted">
+          <h3>Granted Today</h3>
+          <div className="stat-number">{stats.granted}</div>
+        </div>
+        <div className="stat-card rejected">
+          <h3>Rejected Today</h3>
+          <div className="stat-number">{stats.rejected}</div>
+        </div>
+        <div className="stat-card total">
+          <h3>Total Requests</h3>
+          <div className="stat-number">{stats.total}</div>
+        </div>
       </div>
 
       <div className="requests-section">

@@ -5,6 +5,7 @@ import '../styles/StudentDashboard.css';
 function StudentDashboard() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('All');
+  const [showCalendar, setShowCalendar] = useState(false);
   
   // Mock leave history data
   const [leaveHistory] = useState([
@@ -52,6 +53,39 @@ function StudentDashboard() {
     available: totalAllowed - leaveHistory.filter(l => l.status === 'Approved').length
   };
 
+  // Mock leave dates for calendar
+  const leaveDates = [
+    '15-12-2025', '16-12-2025', '17-12-2025', '20-12-2025', '21-12-2025',
+    '05-01-2026', '06-01-2026', '10-01-2026', '11-01-2026', '12-01-2026',
+    '19-01-2026', '20-01-2026'
+  ];
+
+  // Generate calendar from December 2025 to May 2026
+  const generateCalendar = () => {
+    const months = [];
+    for (let i = 0; i < 6; i++) {
+      const year = i === 0 ? 2025 : 2026;
+      const month = i === 0 ? 11 : i - 1;
+      const date = new Date(year, month, 1);
+      const monthName = date.toLocaleString('default', { month: 'long' });
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      months.push({ year, month, monthName, firstDay, daysInMonth });
+    }
+    return months;
+  };
+
+  const isLeaveDay = (day, month, year) => {
+    const dateToCheck = new Date(year, month, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (dateToCheck > today) return false;
+    
+    const dateStr = `${String(day).padStart(2, '0')}-${String(month + 1).padStart(2, '0')}-${year}`;
+    return leaveDates.includes(dateStr);
+  };
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
@@ -81,6 +115,9 @@ function StudentDashboard() {
       <div className="dashboard-actions">
         <button className="apply-leave-btn" onClick={() => navigate('/apply-leave')}>
           Apply for Leave
+        </button>
+        <button className="view-calendar-btn" onClick={() => setShowCalendar(true)}>
+          View Leave Calendar
         </button>
       </div>
 
@@ -143,6 +180,51 @@ function StudentDashboard() {
           </table>
         </div>
       </div>
+
+      {/* Calendar Modal */}
+      {showCalendar && (
+        <div className="modal-overlay" onClick={() => setShowCalendar(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>My Leave Calendar</h2>
+              <button className="close-btn" onClick={() => setShowCalendar(false)}>&times;</button>
+            </div>
+            <div className="calendar-container">
+              {generateCalendar().map((monthData, idx) => (
+                <div key={idx} className="month-calendar">
+                  <h3>{monthData.monthName} {monthData.year}</h3>
+                  <div className="calendar-grid">
+                    <div className="day-header">Sun</div>
+                    <div className="day-header">Mon</div>
+                    <div className="day-header">Tue</div>
+                    <div className="day-header">Wed</div>
+                    <div className="day-header">Thu</div>
+                    <div className="day-header">Fri</div>
+                    <div className="day-header">Sat</div>
+                    
+                    {[...Array(monthData.firstDay)].map((_, i) => (
+                      <div key={`empty-${i}`} className="calendar-day empty"></div>
+                    ))}
+                    
+                    {[...Array(monthData.daysInMonth)].map((_, i) => {
+                      const day = i + 1;
+                      const isLeave = isLeaveDay(day, monthData.month, monthData.year);
+                      return (
+                        <div 
+                          key={day} 
+                          className={`calendar-day ${isLeave ? 'leave-day' : ''}`}
+                        >
+                          {day}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
